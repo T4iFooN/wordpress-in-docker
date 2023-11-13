@@ -1,0 +1,30 @@
+version: '3.3'
+
+services:
+   db:
+     image: mysql:5.7
+     volumes:
+       - db_data:/var/lib/mysql
+     restart: always
+     environment:
+       # Obfuscate passwords when committing to GitHub!
+       MYSQL_PASSWORD: ######
+       MYSQL_ROOT_PASSWORD: ######
+       MYSQL_DATABASE: db-name
+       MYSQL_USER: user-name
+
+   wordpress:
+     depends_on:
+       - db
+     image: wordpress:latest
+     ports:
+       - "8000:80"
+     restart: always
+     environment:
+       WORDPRESS_DB_HOST: db:3306
+       WORDPRESS_DB_USER: user-name
+       # Obfuscate passwords when committing to GitHub!
+       WORDPRESS_DB_PASSWORD: ######
+       WORDPRESS_DB_NAME: db-name
+volumes:
+    db_data: {}
